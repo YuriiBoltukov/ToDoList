@@ -1,0 +1,37 @@
+a {
+  text-decoration: none;
+}
+
+.example-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.header-title {
+  display: flex;
+  justify-content: center;
+  color: rgb(240, 18, 18);
+  font-size: 90px;
+  margin-top: 90px;
+  font-family: 'Splash', cursive;
+}
+
+.menu-list-items {
+  list-style: none;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.menu-list-item {
+  padding: 10px 0;
+  margin-left: 20px;
+  font-family: 'Splash', cursive;
+  font-style: normal;
+  margin-top: 40px;
+}
+
+.add-btn {
+  border-radius: 50%;
+}
+
+
