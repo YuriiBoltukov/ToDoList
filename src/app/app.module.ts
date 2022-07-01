@@ -4,11 +4,13 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material/material.module';
 import { FormsModule } from '@angular/forms';
+import { TaskInfoModalComponent } from './component/task-info-modal/task-info-modal.component';
 
 @NgModule({
 
   declarations: [
-    AppComponent
+    AppComponent,
+    TaskInfoModalComponent
   ],
   imports: [
     BrowserModule,

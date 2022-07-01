@@ -8,60 +8,104 @@
 </head>
 <body>
   <header class="header">
-    <h1 class="header-title">To-Do List</h1>
-
-
+    <h1 class="header-title font-splash">To-Do List</h1>
   </header>
   <section class="add-task">
+    <mat-card class="example-card">
+      <mat-card-title class="font-splash">Add new task</mat-card-title>
+      <mat-card-subtitle class="font-splash">... and some subscription</mat-card-subtitle>
+      <mat-card-content>
+        <form class="example-form">
+          <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label class="font-splash">Task's title</mat-label>
+            <input matInput>
+          </mat-form-field>
 
-    <form class="example-form">
-      <mat-form-field class="example-full-width" appearance="fill">
-        <mat-label>Head</mat-label>
-        <input matInput  >
-      </mat-form-field>
-
-      <mat-form-field class="example-full-width" appearance="fill">
-        <mat-label>launch your introduction</mat-label>
-        <textarea matInput ></textarea>
-      </mat-form-field>
-    </form>
-    <button mat-raised-button color="accent">
-      <mat-icon>add</mat-icon>
-    </button>
+          <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label class="font-splash">Task's subscription</mat-label>
+            <textarea matInput></textarea>
+          </mat-form-field>
+        </form>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button mat-fab color="accent" class="add-btn">
+          <mat-icon>add</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
   </section>
-
-
 
   <section class="task-list">
-
-    <div class="menu">
-      <ul class="menu-list-items">
-        <li class="menu-list-item">
-          <a href="">ALL TASKS</a>
-        </li>
-        <li class="menu-list-item">
-          <a href="">TODAY TASKS</a>
-        </li>
-        <li class="menu-list-item">
-         <a href="">TOMMOROW TASKS</a>
-        </li>
-        <li class="menu-list-item">
-          <a href="">UPCOMINGS...</a>
-        </li>
-      </ul>
+    <div class="task-wrapper">
+      <mat-chip-list>
+        <mat-chip class="font-splash chip-btn">
+          All tasks
+        </mat-chip>
+        <mat-chip class="font-splash chip-btn">
+          Today tasks
+        </mat-chip>
+        <mat-chip class="font-splash chip-btn">
+          Tommorow tasks
+        </mat-chip>
+        <mat-chip class="font-splash chip-btn">
+          Upcomings...
+        </mat-chip>
+      </mat-chip-list>
     </div>
+
+
+
     <div class="task-table">
-      <table border="1">
-        <tr>
-          <th>1</th>
-          <th>2</th>
-          <th>2</th>
-          <th>3</th>
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+        <!-- Checkbox Column -->
+        <ng-container matColumnDef="select">
+          <th mat-header-cell *matHeaderCellDef>
+            <mat-checkbox (change)="$event ? toggleAllRows() : null"
+                          [checked]="selection.hasValue() && isAllSelected()"
+                          [indeterminate]="selection.hasValue() && !isAllSelected()"
+                          [aria-label]="checkboxLabel()">
+            </mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox (click)="$event.stopPropagation()"
+                          (change)="$event ? selection.toggle(row) : null"
+                          [checked]="selection.isSelected(row)"
+                          [aria-label]="checkboxLabel(row)">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+
+        <!-- Position Column -->
+        <ng-container matColumnDef="position">
+          <th mat-header-cell *matHeaderCellDef> No. </th>
+          <td mat-cell *matCellDef="let element" (click)="openDialog()"> {{element.position}} </td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> Name </th>
+          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+            (click)="selection.toggle(row)">
         </tr>
       </table>
-
     </div>
+    <div>
+      <mat-card class="task-card">
+        <mat-card-title>task name</mat-card-title>
+        <mat-card-actions>
+          <button mat-button (click)="openDialog()">подробнее</button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+
   </section>
+
+
 </body>
 </html>
 

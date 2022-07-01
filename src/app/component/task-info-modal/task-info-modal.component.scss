@@ -1,0 +1,13 @@
+.modal-wrapper {
+  width: 550px;
+}
+
+.modal-card {
+  contain: content;
+}
+
+@media (max-width: 570px) {
+  .modal-wrapper {
+    width: 280px;
+  }
+}

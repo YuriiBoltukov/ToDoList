@@ -7,13 +7,16 @@ a {
   flex-direction: column;
 }
 
+.header {
+  padding: 20px;
+}
+
 .header-title {
-  display: flex;
-  justify-content: center;
+  text-align: center;
   color: rgb(240, 18, 18);
   font-size: 90px;
+  line-height: 95px;
   margin-top: 90px;
-  font-family: 'Splash', cursive;
 }
 
 .menu-list-items {
@@ -30,8 +33,70 @@ a {
   margin-top: 40px;
 }
 
-.add-btn {
-  border-radius: 50%;
+.example-card {
+  max-width: 800px;
+  margin: 0 auto;
 }
 
+section {
+  padding: 20px;
+}
 
+.task-list {
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.task-wrapper {
+  padding: 20px;
+  display: flex;
+  justify-content: space-around;
+}
+
+table {
+  width: 100%;
+}
+
+.mat-standard-chip {
+  padding: 25px 25px
+}
+
+.mat-chip {
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 42px;
+}
+
+.task-card {
+  display: none;
+  max-width: 800px;
+  margin: 0 auto;
+  font-size: 16px;
+  line-height: 26px;
+}
+
+@media (max-width: 570px) {
+  .mat-chip {
+    font-size: 16px;
+    line-height: 32px;
+    font-weight: 400;
+  }
+
+  .header-title {
+    margin: 30px 20px;
+    font-size: 24px;
+    line-height: 32px;
+  }
+
+  .mat-standard-chip {
+    padding: 15px 15px
+  }
+
+  .task-table {
+    display: none;
+  }
+
+  .task-card {
+    display: block;
+  }
+}
