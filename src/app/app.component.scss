@@ -75,6 +75,14 @@ table {
   line-height: 26px;
 }
 
+.mat-column-select {
+  width: 40px;
+}
+
+.mat-column-position {
+  width: 40px;
+}
+
 @media (max-width: 570px) {
   .mat-chip {
     font-size: 16px;
