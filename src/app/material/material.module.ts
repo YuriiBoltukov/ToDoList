@@ -7,7 +7,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTableModule } from '@angular/material/table';
-import {MatDialogModule} from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 const MaterialComponents = [
   MatButtonModule,
@@ -19,11 +20,12 @@ const MaterialComponents = [
   MatChipsModule,
   MatTableModule,
   MatDialogModule,
+  MatToolbarModule,
 ];
 
 @NgModule({
   declarations: [],
   imports: [...MaterialComponents],
-  exports: [...MaterialComponents]
+  exports: [...MaterialComponents],
 })
-export class MaterialModule { }
+export class MaterialModule {}

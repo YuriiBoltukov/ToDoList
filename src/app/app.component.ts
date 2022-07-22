@@ -1,43 +1,118 @@
-import { Component } from '@angular/core';
+//@ts-check
+import { Component, OnInit } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material/table';
 import { TaskInfoModalComponent } from './component/task-info-modal/task-info-modal.component';
+import { v4 as uuidv4 } from 'uuid';
 import {
   MatDialog,
   MatDialogRef,
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
+import { formatDate } from '@angular/common';
 
-export interface PeriodicElement {
+/**
+ * Description/interface/plan of task (only one task)
+ */
+export interface Task {
   name: string;
-  position: number;
+  id: string;
+  description: string;
+  date: string; //dd.mm.YYYY
 }
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  { position: 1, name: 'Hydrogen' },
-  { position: 2, name: 'Helium' },
-  { position: 3, name: 'Lithium' },
-  { position: 4, name: 'Beryllium' },
-  { position: 5, name: 'Boron' },
-  { position: 6, name: 'Carbon' },
-  { position: 7, name: 'Nitrogen' },
-  { position: 8, name: 'Oxygen' },
-  { position: 9, name: 'Fluorine' },
-  { position: 10, name: 'Neon' },
-];
-
+/**
+ * It's decorator - angular value - It always have .html and .ts
+ */
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
-  title = 'ToDo';
-  displayedColumns: string[] = ['select', 'position', 'name'];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
-  selection = new SelectionModel<PeriodicElement>(true, []);
+/**
+ * Controller for html (template)
+ */
+export class AppComponent implements OnInit {
+  /**
+   * List of tasks
+   * {Task[]} - array with tasks
+   */
+  taskList: Task[] = [];
 
+  /**
+   * it is a shit whose save another shit
+   */
+  appStorage = window.localStorage;
+
+  /**
+   * For save form state
+   * Fot getting form data
+   */
+  taskForm = {
+    title: '',
+    description: '',
+  };
+
+  /**
+   * Title for page
+   */
+  title = 'ToDo';
+
+  /**
+   * Columns in the mat table
+   */
+  displayedColumns: string[] = ['select', 'position', 'name', 'date'];
+
+  /**
+   * Data for drawing mat table
+   * It neeed to change after every change task list!
+   * {MatTableDataSource} - it is object instance of MatTableDataSource
+   */
+  dataSource = new MatTableDataSource<Task>(this.taskList);
+
+  /**
+   * It object for saving selected rows in the mat table
+   * The object is instance of {SelectionModel}
+   */
+  selection = new SelectionModel<string>(true, []);
+
+  /**
+   * getter for tasklist from local storage
+   */
+  get dataLocalStorage(): Task[] {
+    const data = this.appStorage.getItem('taskList');
+    if (data){
+      return  JSON.parse(data);
+    }
+    this.appStorage.setItem('taskList','[]');
+    return [];
+  }
+
+  /**
+   * There is initialization of class
+   */
   constructor(public dialog: MatDialog) {}
+
+  /**
+   * called once after setting the bean properties that are involved in the binding. Performs component initialization
+   */
+  ngOnInit(): void {
+    this.taskList = this.dataLocalStorage;
+    this.dataSource.data = this.taskList;
+  }
+
+  /**
+   * method for writting data to local storage by key
+   * @param key {string}
+   * @param data {any}
+   */
+  setDataLocalStorage(key: string, data: any) {
+    this.appStorage.setItem(key, JSON.stringify(data));
+  }
+
+  /**
+   * open modal window
+   */
   openDialog(): void {
     const dialogRef = this.dialog.open(TaskInfoModalComponent, {
       panelClass: 'app-full-bleed-dialog',
@@ -48,8 +123,77 @@ export class AppComponent {
     });
   }
 
-  /** Whether the number of selected elements matches the total number of rows. */
-  isAllSelected() {
+  /**
+   * method for filter tasks
+   */
+  filterTasks(id: string): void {
+    if (id === 'chip-1') {
+      this.taskList = this.dataLocalStorage;
+      this.dataSource.data = this.taskList;
+    } else if (id === 'chip-2') {
+      const todayDate = this.formateDate(Date.now());
+      this.taskList = [];
+      this.taskList = this.filtertasksbyDate(todayDate);
+      this.dataSource.data = this.taskList;
+    } else if (id === 'chip-3') {
+      const yesterdayDate = this.formateDate(Date.now() - 86400000);
+      this.taskList = [];
+      this.taskList = this.filtertasksbyDate(yesterdayDate);
+      this.dataSource.data = this.taskList;
+    }
+  }
+
+  /**
+   * method for filter tasks for date
+   */
+  filtertasksbyDate(date: string): Task[] {
+    return this.dataLocalStorage.filter((task) => {
+      return task.date === date;
+    });
+  }
+
+  /**
+   * method for formate date
+   */
+  formateDate(date: number): string {
+    return formatDate(date, 'dd.MM.yyyy', 'en-US');
+  }
+
+  /**
+   * method for add task
+   */
+  addTask(): void {
+    const taskList = this.dataLocalStorage;
+    const task: Task = {
+      id : uuidv4(),
+      name: this.taskForm.title,
+      description: this.taskForm.description,
+      date: this.formateDate(Date.now()),
+    };
+    taskList.push(task);
+    this.setDataLocalStorage('taskList', taskList);
+    this.taskList = this.dataLocalStorage;
+    this.dataSource.data = this.taskList;
+  }
+
+  /**
+   * method for deleting task
+   */
+  deleteTask(): void {
+    let taskList = this.dataLocalStorage;
+    taskList = taskList?.filter((task: Task) => {
+       return !(this.selection.isSelected(task?.id))
+    });
+    this.setDataLocalStorage('taskList', taskList);
+    this.taskList = this.dataLocalStorage;
+    this.dataSource.data = this.taskList;
+  }
+
+  /**
+   * Whether the number of selected elements matches the total number of rows
+   * @returns {boolean}
+   */
+  isAllSelected(): boolean {
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.data.length;
     return numSelected === numRows;
@@ -61,16 +205,16 @@ export class AppComponent {
       this.selection.clear();
       return;
     }
-    this.selection.select(...this.dataSource.data);
+    this.selection.select(...this.dataSource.data.map(data => data?.id));
   }
 
   /** The label for the checkbox on the passed row */
-  checkboxLabel(row?: PeriodicElement): string {
-    if (!row) {
+  checkboxLabel(id?: string): string {
+    if (!id) {
       return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
     }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${
-      row.position + 1
+    return `${this.selection.isSelected(id) ? 'deselect' : 'select'} row ${
+      id + 1
     }`;
   }
 }

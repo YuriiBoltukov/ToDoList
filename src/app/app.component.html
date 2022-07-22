@@ -20,17 +20,17 @@
         <form class="example-form">
           <mat-form-field class="example-full-width" appearance="fill">
             <mat-label class="font-splash">Task's title</mat-label>
-            <input matInput>
+            <input matInput [(ngModel)]="taskForm.title" [ngModelOptions]="{ standalone: true }">
           </mat-form-field>
 
           <mat-form-field class="example-full-width" appearance="fill">
-            <mat-label class="font-splash">Task's subscription</mat-label>
-            <textarea matInput></textarea>
+            <mat-label class="font-splash" >Task's subscription</mat-label>
+            <textarea matInput [(ngModel)]="taskForm.description" [ngModelOptions]="{ standalone: true }"></textarea>
           </mat-form-field>
         </form>
       </mat-card-content>
       <mat-card-actions>
-        <button mat-raised-button mat-fab color="accent" class="add-btn">
+        <button mat-raised-button mat-fab color="accent" (click)="addTask()">
           <mat-icon>add</mat-icon>
         </button>
       </mat-card-actions>
@@ -40,17 +40,14 @@
   <section class="task-list">
     <div class="task-wrapper">
       <mat-chip-list>
-        <mat-chip class="font-splash chip-btn">
+        <mat-chip id="chip-1" class="font-splash chip-btn" (click)="filterTasks('chip-1')">
           All tasks
         </mat-chip>
-        <mat-chip class="font-splash chip-btn">
+        <mat-chip id="chip-2" class="font-splash chip-btn" (click)="filterTasks('chip-2')">
           Today tasks
         </mat-chip>
-        <mat-chip class="font-splash chip-btn">
-          Tommorow tasks
-        </mat-chip>
-        <mat-chip class="font-splash chip-btn">
-          Upcomings...
+        <mat-chip id="chip-3" class="font-splash chip-btn" (click)="filterTasks('chip-3')">
+          Yesterday tasks
         </mat-chip>
       </mat-chip-list>
     </div>
@@ -68,26 +65,32 @@
             </mat-checkbox>
           </th>
           <td mat-cell *matCellDef="let row">
-            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
-              [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row?.id) : null"
+              [checked]="selection.isSelected(row?.id)" [aria-label]="checkboxLabel(row?.id)">
             </mat-checkbox>
           </td>
         </ng-container>
 
-        <!-- Position Column -->
+        <!-- Id Column -->
         <ng-container matColumnDef="position">
-          <th mat-header-cell *matHeaderCellDef>No.</th>
-          <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let element; let index"> {{element.row}} </td>
         </ng-container>
 
         <!-- Name Column -->
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef>Task's title</th>
-          <td mat-cell *matCellDef="let element" (click)="openDialog()"> {{element.name}} </td>
+          <td mat-cell *matCellDef="let element" (click)="openDialog()">{{element.name}}</td>
+        </ng-container>
+
+        <!-- Date Column -->
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef>Date</th>
+          <td mat-cell *matCellDef="let element">{{element.date}}</td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)">
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row?.id)">
         </tr>
       </table>
     </div>
@@ -100,8 +103,21 @@
       </mat-card>
     </div>
 
+    <div class="example-button-row">
+      <button mat-stroked-button color="accent" (click)="deleteTask()">Delete</button>
+    </div>
   </section>
 
+  <footer class="footer">
+    <mat-toolbar>
+      <a href="https://github.com/YuriiBoltukov">
+        <img src="../assets/github-logo.png" class='footer-img' alt="github link">
+      </a>
+      <p class="footer-text">
+        YuriiBoltukov, 2022
+      </p>
+    </mat-toolbar>
+  </footer>
 
 </body>
 

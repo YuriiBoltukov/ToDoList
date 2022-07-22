@@ -7,7 +7,6 @@ import { FormsModule } from '@angular/forms';
 import { TaskInfoModalComponent } from './component/task-info-modal/task-info-modal.component';
 
 @NgModule({
-
   declarations: [
     AppComponent,
     TaskInfoModalComponent
@@ -15,8 +14,8 @@ import { TaskInfoModalComponent } from './component/task-info-modal/task-info-mo
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    MaterialModule,
     FormsModule,
+    MaterialModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
