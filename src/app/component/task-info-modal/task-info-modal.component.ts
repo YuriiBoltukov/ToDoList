@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject } from '@angular/core';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Task } from 'src/app/app.component';
 @Component({
   selector: 'app-task-info-modal',
   templateUrl: './task-info-modal.component.html',
@@ -7,7 +8,8 @@ import { MatDialogRef } from '@angular/material/dialog';
 })
 export class TaskInfoModalComponent {
   constructor(
-    public dialogRef: MatDialogRef<TaskInfoModalComponent> //@Inject(MAT_DIALOG_DATA) public data: DialogData,
+    public dialogRef: MatDialogRef<TaskInfoModalComponent>, //@Inject(MAT_DIALOG_DATA) public data: DialogData,
+    @Inject(MAT_DIALOG_DATA) public data: Task,
   ) {}
 
   close() {

@@ -110,13 +110,14 @@ export class AppComponent implements OnInit {
   /**
    * open modal window
    */
-  openDialog(): void {
+  openDialog(task: Task): void {
     const dialogRef = this.dialog.open(TaskInfoModalComponent, {
+      data: task,
       panelClass: 'app-full-bleed-dialog',
     });
 
-    dialogRef.afterClosed().subscribe(() => {
-      console.log('The dialog was closed');
+    dialogRef.afterClosed().subscribe((result: Task) => {
+      if (result) this.deleteTaskById(result.id)
     });
   }
 
@@ -198,6 +199,19 @@ export class AppComponent implements OnInit {
     this.dataSource.data = this.taskList;
   }
 
+  /**
+   * method for delete task by Id
+   * @param id {string}
+   */
+  deleteTaskById(id: string): void {
+    let taskList = this.dataLocalStorage;
+    taskList = taskList?.filter((task: Task) => {
+       return task.id !== id
+    });
+    this.setDataLocalStorage('taskList', taskList);
+    this.taskList = this.dataLocalStorage;
+    this.dataSource.data = this.taskList;
+  }
   /**
    * Whether the number of selected elements matches the total number of rows
    * @returns {boolean}
