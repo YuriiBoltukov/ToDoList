@@ -4,7 +4,7 @@
 
 html,
 body {
-  height: 100%;
+  min-height: 100vh;
 }
 
 body {
@@ -12,8 +12,16 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
+p {
+  margin: 0 !important;
+}
+
 .font-splash {
   @include font-splash;
+}
+
+.edit-modal-dialod {
+  width: 1200px;
 }
 
 .app-full-bleed-dialog .mat-dialog-container {

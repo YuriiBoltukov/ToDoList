@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { MatDialog } from '@angular/material/dialog';
 import { formatDate } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { EditModuleComponent } from './edit-module/edit-module.component';
 
 /**
  * Description/interface/plan of task (only one task)
@@ -58,7 +59,7 @@ export class AppComponent implements OnInit {
   /**
    * Columns in the mat table
    */
-  displayedColumns: string[] = ['select', 'position', 'name', 'date'];
+  displayedColumns: string[] = ['select', 'position', 'name', 'date', 'edit'];
 
   /**
    * Data for drawing mat table
@@ -117,10 +118,47 @@ export class AppComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result: Task) => {
-      if (result) this.deleteTaskById(result.id)
+      if (result) this.deleteTaskById(result.id);
     });
   }
 
+  /**
+   * method for edit task
+   */
+  editTask(task: Task | undefined): void {
+    const dialogRef = this.dialog.open(EditModuleComponent, {
+      data: task,
+      panelClass: 'edit-modal-dialod',
+    });
+
+    dialogRef.afterClosed().subscribe((result: Task | undefined) => {
+      if (result) {
+        const taskList = this.dataLocalStorage;
+        taskList.forEach((task) => {
+          if (task.id === result.id) {
+            task.name = result.name;
+            task.description = result.description;
+          }
+        })
+        this.setDataLocalStorage('taskList', taskList);
+        this.taskList = this.dataLocalStorage;
+        this.dataSource.data = this.taskList;
+      }
+    });
+  }
+
+  sortTasks(key: 'name' | 'date'): void{
+    this.taskList = this.taskList.sort((a: Task, b: Task) =>{
+      if (a[key] > b[key]) {
+        return 1;
+      }
+      if (a[key] < b[key]) {
+        return -1;
+      }
+      return 0;
+    })
+    this.dataSource.data = this.taskList;
+  }
   /**
    * method for filter tasks
    */
@@ -161,19 +199,19 @@ export class AppComponent implements OnInit {
    * method for add task
    */
   addTask(): void {
-    const taskList = this.dataLocalStorage;
-    const task: Task = {
-      id : uuidv4(),
-      name: this.taskForm.title,
-      description: this.taskForm.description,
-      date: this.formateDate(Date.now()),
-    };
-    if(this.taskForm.title.length > 0 && this.taskForm.description.length > 0) {
+    if(this.taskForm.title && this.taskForm.description) {
+      const taskList = this.dataLocalStorage;
+      const task: Task = {
+        id : uuidv4(),
+        name: this.taskForm.title,
+        description: this.taskForm.description,
+        date: this.formateDate(Date.now()),
+      };
       taskList.push(task);
       this.setDataLocalStorage('taskList', taskList);
       this.taskList = this.dataLocalStorage;
       this.dataSource.data = this.taskList;
-    } else this.showToastMessage()
+    } else this.showToastMessage();
   }
 
   /**

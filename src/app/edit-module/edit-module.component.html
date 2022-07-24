@@ -1,0 +1,24 @@
+<mat-toolbar>
+  <span>Edit task</span>
+</mat-toolbar>
+<mat-card-content>
+  <form class="edit-form">
+
+    <mat-form-field class="edit__form-field" appearance="fill">
+      <mat-label class="font-splash">Task's title</mat-label>
+      <input required matInput [(ngModel)]="taskForm.title" [ngModelOptions]="{ standalone: true }">
+    </mat-form-field>
+
+    <mat-form-field class="edit__form-field" appearance="fill">
+      <mat-label class="font-splash">Task's subscription</mat-label>
+      <textarea required matInput [(ngModel)]="taskForm.description"
+        [ngModelOptions]="{ standalone: true }"></textarea>
+    </mat-form-field>
+
+  </form>
+</mat-card-content>
+
+<div mat-dialog-actions class="form-btns">
+  <button mat-flat-button color="primary" class="form-btn" (click)="edit()">Edit</button>
+  <button class="form-btn" mat-button (click)="close()">Close</button>
+</div>
