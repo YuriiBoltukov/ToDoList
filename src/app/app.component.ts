@@ -4,12 +4,9 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material/table';
 import { TaskInfoModalComponent } from './component/task-info-modal/task-info-modal.component';
 import { v4 as uuidv4 } from 'uuid';
-import {
-  MatDialog,
-  MatDialogRef,
-  MAT_DIALOG_DATA,
-} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { formatDate } from '@angular/common';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 /**
  * Description/interface/plan of task (only one task)
@@ -91,7 +88,7 @@ export class AppComponent implements OnInit {
   /**
    * There is initialization of class
    */
-  constructor(public dialog: MatDialog) {}
+  constructor(public readonly dialog: MatDialog, private readonly snackBar: MatSnackBar) {}
 
   /**
    * called once after setting the bean properties that are involved in the binding. Performs component initialization
@@ -170,10 +167,22 @@ export class AppComponent implements OnInit {
       description: this.taskForm.description,
       date: this.formateDate(Date.now()),
     };
-    taskList.push(task);
-    this.setDataLocalStorage('taskList', taskList);
-    this.taskList = this.dataLocalStorage;
-    this.dataSource.data = this.taskList;
+    if(this.taskForm.title.length > 0 && this.taskForm.description.length > 0) {
+      taskList.push(task);
+      this.setDataLocalStorage('taskList', taskList);
+      this.taskList = this.dataLocalStorage;
+      this.dataSource.data = this.taskList;
+    } else this.showToastMessage()
+  }
+
+  /**
+   * method for showing message
+   */
+  showToastMessage(): void {
+    this.snackBar.open('All form fields must be completed', 'Understand', {
+      horizontalPosition: 'right',
+      verticalPosition: 'top',
+    });
   }
 
   /**

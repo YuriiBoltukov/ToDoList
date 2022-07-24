@@ -9,6 +9,9 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSnackBarModule,
+         MatSnackBarHorizontalPosition,
+         MatSnackBarVerticalPosition,} from '@angular/material/snack-bar';
 
 const MaterialComponents = [
   MatButtonModule,
@@ -21,6 +24,7 @@ const MaterialComponents = [
   MatTableModule,
   MatDialogModule,
   MatToolbarModule,
+  MatSnackBarModule,
 ];
 
 @NgModule({

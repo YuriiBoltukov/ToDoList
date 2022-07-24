@@ -20,12 +20,12 @@
         <form class="example-form">
           <mat-form-field class="example-full-width" appearance="fill">
             <mat-label class="font-splash">Task's title</mat-label>
-            <input matInput [(ngModel)]="taskForm.title" [ngModelOptions]="{ standalone: true }">
+            <input required=" " matInput [(ngModel)]="taskForm.title" [ngModelOptions]="{ standalone: true }">
           </mat-form-field>
 
           <mat-form-field class="example-full-width" appearance="fill">
             <mat-label class="font-splash" >Task's subscription</mat-label>
-            <textarea matInput [(ngModel)]="taskForm.description" [ngModelOptions]="{ standalone: true }"></textarea>
+            <textarea required=" "  matInput [(ngModel)]="taskForm.description" [ngModelOptions]="{ standalone: true }"></textarea>
           </mat-form-field>
         </form>
       </mat-card-content>
