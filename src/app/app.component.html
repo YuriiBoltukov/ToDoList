@@ -137,7 +137,9 @@
       <mat-card class="task-card" *ngFor="let task of taskList">
         <mat-card-title>{{task?.name}}</mat-card-title>
         <mat-card-actions>
-          <button mat-flat-button color="accent" (click)="openDialog(task)">Подробнее</button>
+          <button mat-flat-button color="accent" (click)="openDialog(task)">
+            Подробнее
+          </button>
           <button class="edit-btn" (click)="editTask(task)">
             <mat-icon aria-hidden="false" color="primary">edit</mat-icon>
           </button>
