@@ -19,6 +19,11 @@ export interface Task {
   date: string; //dd.mm.YYYY
 }
 
+export enum SortOrder {
+  ASC = 'ASC',
+  DESC = 'DESC',
+}
+
 /**
  * It's decorator - angular value - It always have .html and .ts
  */
@@ -31,6 +36,13 @@ export interface Task {
  * Controller for html (template)
  */
 export class AppComponent implements OnInit {
+  showButtonDate: boolean = false;
+  showButtonName: boolean = false;
+  /**
+   * type of sort
+   */
+  typeOfSort: SortOrder = this.sortOrder.DESC;
+
   /**
    * List of tasks
    * {Task[]} - array with tasks
@@ -73,6 +85,13 @@ export class AppComponent implements OnInit {
    * The object is instance of {SelectionModel}
    */
   selection = new SelectionModel<string>(true, []);
+
+  /**
+   * Shortcut for SortOrder
+   */
+  get sortOrder() {
+    return SortOrder;
+  }
 
   /**
    * getter for tasklist from local storage
@@ -147,17 +166,34 @@ export class AppComponent implements OnInit {
     });
   }
 
+  /**
+   *
+   */
   sortTasks(key: 'name' | 'date'): void{
-    this.taskList = this.taskList.sort((a: Task, b: Task) =>{
-      if (a[key] > b[key]) {
-        return 1;
-      }
-      if (a[key] < b[key]) {
-        return -1;
-      }
-      return 0;
-    })
-    this.dataSource.data = this.taskList;
+    if (this.typeOfSort === this.sortOrder.ASC) {
+      this.taskList = this.taskList.sort((a: Task, b: Task) =>{
+        if (a[key] > b[key]) {
+          return 1;
+        }
+        if (a[key] < b[key]) {
+          return -1;
+        }
+        return 0;
+      })
+      this.dataSource.data = this.taskList;
+    } else {
+      this.taskList = this.taskList.sort((a: Task, b: Task) =>{
+        if (a[key] < b[key]) {
+          return 1;
+        }
+        if (a[key] > b[key]) {
+          return -1;
+        }
+        return 0;
+      })
+      this.dataSource.data = this.taskList;
+    }
+    this.typeOfSort = this.typeOfSort === this.sortOrder.ASC ? this.sortOrder.DESC : this.sortOrder.ASC;
   }
   /**
    * method for filter tasks

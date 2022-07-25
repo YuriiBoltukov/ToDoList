@@ -81,10 +81,16 @@
 
         <!-- Name Column -->
         <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef>
+          <th mat-header-cell *matHeaderCellDef
+            (mouseover)="showButtonName = true"
+            (mouseleave)="showButtonName = false">
             Task's title
-            <button mat-button (click)="sortTasks('name')">
-              <mat-icon color="primary">sort</mat-icon>
+            <button *ngIf="showButtonName" mat-button (click)="sortTasks('name')">
+              <mat-icon class="sort-icon" *ngIf="typeOfSort === sortOrder.DESC; else ASC" color="primary">arrow_upward
+              </mat-icon>
+              <ng-template #ASC>
+                <mat-icon class="sort-icon" color="primary">arrow_downward</mat-icon>
+              </ng-template>
             </button>
           </th>
           <td mat-cell *matCellDef="let element" (click)="openDialog(element)">{{element.name}}</td>
@@ -92,9 +98,21 @@
 
         <!-- Date Column -->
         <ng-container matColumnDef="date">
-          <th mat-header-cell *matHeaderCellDef>
+          <th mat-header-cell *matHeaderCellDef
+            (mouseover)="showButtonDate = true"
+            (mouseleave)="showButtonDate = false">
             Date
-            <mat-icon color="primary">arrow_drop_down</mat-icon>
+            <button *ngIf="showButtonDate"
+              class="sort-icon-date"
+              mat-button
+              (click)="sortTasks('date')">
+              <mat-icon class="sort-icon" *ngIf="typeOfSort === sortOrder.DESC; else ASC" color="primary">
+                arrow_upward
+              </mat-icon>
+              <ng-template #ASC>
+                <mat-icon class="sort-icon" color="primary">arrow_downward</mat-icon>
+              </ng-template>
+            </button>
           </th>
           <td mat-cell *matCellDef="let element">{{element.date}}</td>
         </ng-container>
